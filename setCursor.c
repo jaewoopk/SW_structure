@@ -16,6 +16,7 @@ int main(void) {
             printf("■");
         }
     }
+    // 어떻게 하면 안깨지게 하는지, 원은 어떻게 만들 수 있을지 고민해보기
 
     getchar();
     return 0;
