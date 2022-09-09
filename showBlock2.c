@@ -25,7 +25,25 @@ char blockModel[][4][4] = {
         {0, 1, 0, 0},
         {0, 1, 0, 0},
         {0, 1, 0, 0}
-    } 
+    },
+    {
+        {0, 1, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {1, 1, 0, 0},
+        {0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0},
+        {0, 0, 0, 0},
+        {1, 1, 0, 0},
+        {0, 1, 1, 0}
+    }
 };
 
 void ShowBlock(char blockInfo[4][4]);
@@ -39,11 +57,20 @@ int main(void) {
     SetCurrentCursorPos(10, 0);
     ShowBlock(blockModel[1]);
     
-    SetCurrentCursorPos(0, 6);
+    SetCurrentCursorPos(20, 0);
     ShowBlock(blockModel[2]);
 
-    SetCurrentCursorPos(10, 6);
+    SetCurrentCursorPos(0, 6);
     ShowBlock(blockModel[3]);
+
+    SetCurrentCursorPos(10, 6);
+    ShowBlock(blockModel[4]);
+
+    SetCurrentCursorPos(20, 6);
+    ShowBlock(blockModel[5]);
+    
+    SetCurrentCursorPos(0, 12);
+    ShowBlock(blockModel[6]);
 
     getchar();
     return (0);
