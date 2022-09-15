@@ -32,7 +32,10 @@ void ShowBlock(char blockInfo[4][4]);
 void SetCurrentCursorPos(int x, int y);
 COORD GetCurrentCursorPos(void);
 
+// setCursor¿ getCursor¿ ¿¿¿ ¿¿ ¿¿¿ ¿¿ ¿¿¿ ¿
+
 int main(void) {
+	SetCurrentCursorPos(0, 0);
     SetCurrentCursorPos(0, 0);
     ShowBlock(blockModel[0]);
 
