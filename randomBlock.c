@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
+#include <time.h>
 
 char blockModel[][4][4] =
 {
@@ -154,16 +155,14 @@ char blockModel[][4][4] =
 void DeleteBlock(char blockInfo[4][4]);
 void ShowBlock(char blockInfo[4][4]);
 void SetCurrentCursorPos(int x, int y);
+void RandomlyMoving(void);
+void TypeMoving(COORD *curPos, int ch_type);
 COORD GetCurrentCursorPos(void);
 
 int main(void) {
-    for (int i = 0; i < 5; i++) {
-        SetCurrentCursorPos(i * 2, i);
-        ShowBlock(blockModel[0]);
-        Sleep(500);
-        DeleteBlock(blockModel[0]);
+    for (int i = 0; i < 10; i++) {
+        RandomlyMoving();
     }
-    ShowBlock(blockModel[0]);
     getchar();
     return (0);
 }
@@ -191,12 +190,62 @@ void ShowBlock(char blockInfo[4][4]) {
             SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
 
             if (blockInfo[y][x] == 1) {
-                printf("â– ");
+                printf("¡á");
             }
         }
     }
     SetCurrentCursorPos(curPos.X, curPos.Y);
 }
+
+void RandomlyMoving(void) {
+    srand((unsigned int)time(NULL));
+    int block_id = (rand() % 7) * 4;
+    int choose_type = (rand() % 8);
+    COORD curPos = GetCurrentCursorPos();
+    curPos.X = (rand() % 20) * 2;
+    curPos.Y = (rand() % 20);
+    for (int i = 0; i < 10; i++) {
+        SetCurrentCursorPos(curPos.X, curPos.Y);
+        ShowBlock(blockModel[block_id + (i % 4)]);
+        Sleep(500);
+        DeleteBlock(blockModel[block_id + (i % 4)]);
+        TypeMoving(&curPos, choose_type);
+    }
+
+}
+
+void TypeMoving(COORD *curPos, int ch_type) {
+    switch (ch_type) {
+    case 0 :
+        curPos->Y -= 1;
+        break ;
+    case 1 :
+        curPos->X += 2;
+        curPos->Y -= 1;
+        break ;
+    case 2 :
+        curPos->X += 2;
+        break ;
+    case 3 :
+        curPos->X += 2;
+        curPos->Y += 1;
+        break ;
+    case 4 :
+        curPos->Y += 1;
+        break ;
+    case 5 :
+        curPos->X -= 2;
+        curPos->Y += 1;
+        break ;
+    case 6 :
+        curPos->X -= 2;
+        break ;
+    default :
+        curPos->X -= 2;
+        curPos->Y -= 1;
+    }
+}
+
 void SetCurrentCursorPos(int x, int y) {
     COORD pos = {x, y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);

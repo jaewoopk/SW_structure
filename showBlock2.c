@@ -72,6 +72,8 @@ int main(void) {
     SetCurrentCursorPos(0, 12);
     ShowBlock(blockModel[6]);
 
+    // please check how to running 
+
     getchar();
     return (0);
 }
@@ -84,7 +86,7 @@ void ShowBlock(char blockInfo[4][4]) {
             SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
 
             if (blockInfo[y][x] == 1) {
-                printf("¡á");
+                printf("ï¿½ï¿½");
             }
         }
     }
