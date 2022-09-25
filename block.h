@@ -1,9 +1,21 @@
 #ifndef BLOCK_H
 # define BLOCK_H
 
+# define UPLEFT 113
+# define UP 119
+# define UPRIGHT 101
+# define LEFT 97
+# define STILL 115
+# define RIGHT 100
+# define DOWNLEFT 122
+# define DOWN 120
+# define DOWNRIGHT 99
+# define ROTATERCLOCK 106
+# define ROTATETWICE 107
 # include <stdio.h>
 # include <windows.h>
 # include <time.h>
+# include <conio.h>
 
 char blockModel[][4][4] =
 {
@@ -160,8 +172,10 @@ int block_id;
 void RemoveCursor(void);
 void ShiftRight(void);
 void ShiftLeft(void);
+void BlockUp(void);
 void BlockDown(void);
-void RotateBlock(void);
+void ReverseRotateBlock(void);
+void RotateTwiceBlock(void);
 void DeleteBlock(char blockInfo[4][4]);
 void ShowBlock(char blockInfo[4][4]);
 void SetCurrentCursorPos(int x, int y);
