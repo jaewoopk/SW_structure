@@ -12,6 +12,12 @@
 # define DOWNRIGHT 99
 # define ROTATERCLOCK 106
 # define ROTATETWICE 107
+# define GBOARD_WIDTH 15
+# define GBOARD_HEIGHT 25
+# define GBOARD_ORIGIN_X 4
+# define GBOARD_ORIGIN_Y 2
+
+
 # include <stdio.h>
 # include <windows.h>
 # include <time.h>
@@ -168,7 +174,10 @@ char blockModel[][4][4] =
 };
 
 int block_id;
+int speed;
 
+void DrawGameBoard(void);
+void ProcessKeyInput(void);
 void RemoveCursor(void);
 void ShiftRight(void);
 void ShiftLeft(void);

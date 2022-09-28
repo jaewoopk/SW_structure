@@ -1,19 +1,4 @@
-#include <stdio.h>
-#include <windows.h>
-#include <time.h>
 #include "block.h"
-
-int block_id;
-
-void RemoveCursor(void);
-void ShiftRight(void);
-void ShiftLeft(void);
-void BlockDown(void);
-void RotateBlock(void);
-void DeleteBlock(char blockInfo[4][4]);
-void ShowBlock(char blockInfo[4][4]);
-void SetCurrentCursorPos(int x, int y);
-COORD GetCurrentCursorPos(void);
 
 int main(void) {
     srand((unsigned int)time(NULL));
