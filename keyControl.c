@@ -92,13 +92,14 @@ void BlockUp(void) {
     ShowBlock(blockModel[block_id]);
 }
 
-void BlockDown(void) {
+int BlockDown(void) {
     COORD curPos = GetCurrentCursorPos();
 
     DeleteBlock(blockModel[block_id]);
     curPos.Y += 1;
     SetCurrentCursorPos(curPos.X, curPos.Y);
     ShowBlock(blockModel[block_id]);
+    return (0);
 }
 
 void ReverseRotateBlock(void) {
@@ -143,7 +144,7 @@ void ShowBlock(char blockInfo[4][4]) {
             SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
 
             if (blockInfo[y][x] == 1) {
-                printf("¡á");
+                printf("ï¿½ï¿½");
             }
         }
     }

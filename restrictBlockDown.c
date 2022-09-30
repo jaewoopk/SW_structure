@@ -1,26 +1,41 @@
 #include "block.h"
 
 int main(void) {
-    int key;
+    speed = 10;
     srand((unsigned int)time(NULL));
-    block_id = rand() % 28;
-    speed = 20;
-    COORD curPos = GetCurrentCursorPos();
+    block_id = (rand() % 7) * 4;
     RemoveCursor();
-
     DrawGameBoard();
 
-    curPos.X = GBOARD_WIDTH;
+    COORD curPos = GetCurrentCursorPos();
+
+    curPos.X = GBOARD_WIDTH / 2 + GBOARD_ORIGIN_X;
     curPos.Y = GBOARD_ORIGIN_Y;
     SetCurrentCursorPos(curPos.X, curPos.Y);
     ShowBlock(blockModel[block_id]);
+
     while(1) {
+        if (!BlockDown()) {
+            break ;
+        }
         ProcessKeyInput();
     }
     getchar();
     return (0);
 }
 
+int DetectCollision(int posX, int posY, char blockModel[4][4]) {
+    int x, y;
+    int arrX = posX / 2;
+    int arrY = posY;
+    for (x = 0; x < 4; x++) {
+        for (y = 0; y < 4; y++) {
+            if (gameBoardInfo[arrY + y - GBOARD_ORIGIN_Y][arrX + x - GBOARD_ORIGIN_X] == 1 && blockModel[y][x] == 1)
+                return (0);
+        }
+    }
+    return (1);
+}
 
 void DrawGameBoard(void) {
     int x, y;
@@ -74,9 +89,8 @@ COORD GetCurrentCursorPos(void) {
 
 void ProcessKeyInput(void) {
     int key;
-    BlockDown();
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 25; i++) {
         if (_kbhit() != 0) {
             key = _getch();
             switch (key) {

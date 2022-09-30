@@ -52,13 +52,14 @@ void ShiftLeft(void) {
     ShowBlock(blockModel[block_id]);
 }
 
-void BlockDown(void) {
+int BlockDown(void) {
     COORD curPos = GetCurrentCursorPos();
 
     DeleteBlock(blockModel[block_id]);
     curPos.Y += 1;
     SetCurrentCursorPos(curPos.X, curPos.Y);
     ShowBlock(blockModel[block_id]);
+    return (0);
 }
 
 void RotateBlock(void) {

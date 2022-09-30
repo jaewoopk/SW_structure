@@ -12,8 +12,8 @@
 # define DOWNRIGHT 99
 # define ROTATERCLOCK 106
 # define ROTATETWICE 107
-# define GBOARD_WIDTH 15
-# define GBOARD_HEIGHT 25
+# define GBOARD_WIDTH 20
+# define GBOARD_HEIGHT 20
 # define GBOARD_ORIGIN_X 4
 # define GBOARD_ORIGIN_Y 2
 
@@ -23,6 +23,7 @@
 # include <time.h>
 # include <conio.h>
 
+int gameBoardInfo[GBOARD_HEIGHT + 1][GBOARD_WIDTH + 2];
 char blockModel[][4][4] =
 {
     {
@@ -176,13 +177,14 @@ char blockModel[][4][4] =
 int block_id;
 int speed;
 
+int DetectCollision(int posX, int posY, char blockModel[4][4]);
 void DrawGameBoard(void);
 void ProcessKeyInput(void);
 void RemoveCursor(void);
 void ShiftRight(void);
 void ShiftLeft(void);
 void BlockUp(void);
-void BlockDown(void);
+int BlockDown(void);
 void ReverseRotateBlock(void);
 void RotateTwiceBlock(void);
 void DeleteBlock(char blockInfo[4][4]);
