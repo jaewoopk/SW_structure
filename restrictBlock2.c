@@ -28,7 +28,7 @@ int DetectCollision(int posX, int posY, char blockModel[4][4]) {
     int arrY = posY;
     for (x = 0; x < 4; x++) {
         for (y = 0; y < 4; y++) {
-            if (gameBoardInfo[arrY + y - GBOARD_ORIGIN_Y][arrX + x - GBOARD_ORIGIN_X] == 1 && blockModel[y][x] == 1)
+            if (gameBoardInfo[arrY + y][arrX + x] == 1 && blockModel[y][x] == 1)
                 return (0);
         }
     }
@@ -38,7 +38,7 @@ int DetectCollision(int posX, int posY, char blockModel[4][4]) {
 void DrawGameBoard(void) {
     int x, y;
     
-    for (y = GBOARD_ORIGIN_Y; y <= GBOARD_HEIGHT + GBOARD_ORIGIN_Y; y++){
+    for (y = 0; y <= GBOARD_HEIGHT; y++){
         gameBoardInfo[y][0] = 1;
         gameBoardInfo[y][GBOARD_WIDTH / 2 + 1] = 1;
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y+y);
@@ -48,12 +48,12 @@ void DrawGameBoard(void) {
             printf("¦¢");
     }
 
-    for (x = GBOARD_ORIGIN_X; x < GBOARD_WIDTH + 2 + GBOARD_ORIGIN_X; x++){
+    for (x = 0; x < GBOARD_WIDTH + 2; x++){
         printf("¦¡");
         gameBoardInfo[GBOARD_HEIGHT][x] = 1;
     }
 
-    for (y = GBOARD_ORIGIN_Y; y <= GBOARD_HEIGHT + GBOARD_ORIGIN_Y; y++){
+    for (y = 0; y <= GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X+ GBOARD_WIDTH + 2, GBOARD_ORIGIN_Y+GBOARD_HEIGHT -y);
         if (y == 0)
             printf("¦¥");
@@ -116,7 +116,7 @@ void ProcessKeyInput(void) {
 void ShiftRight(void) {
     COORD curPos = GetCurrentCursorPos();
 
-    if (!DetectCollision(curPos.X + 2, curPos.Y, blockModel[block_id])) {
+    if (!DetectCollision(curPos.X + 2 + GBOARD_ORIGIN_X, curPos.Y, blockModel[block_id])) {
         return ;
     }
     DeleteBlock(blockModel[block_id]);
@@ -159,7 +159,7 @@ void ReverseRotateBlock(void) {
     if (!DetectCollision(curPos.X, curPos.Y, blockModel[block_rotated])) {
         return ;
     }
-    DeleteBlock(blockModel[block_id++]);
+    DeleteBlock(blockModel[block_id]);
     block_id = block_rotated;
     if (block_id == block_base + 4) block_id = block_base;
     ShowBlock(blockModel[block_id]);
