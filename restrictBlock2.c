@@ -1,33 +1,46 @@
 #include "block.h"
 
 int main(void) {
-    int key;
+    speed = 10;
     srand((unsigned int)time(NULL));
-    block_id = rand() % 28;
-    speed = 20;
-    COORD curPos = GetCurrentCursorPos();
+    block_id = (rand() % 7) * 4;
     RemoveCursor();
-
     DrawGameBoard();
 
-    curPos.X = GBOARD_WIDTH;
+    COORD curPos = GetCurrentCursorPos();
+
+    curPos.X = GBOARD_WIDTH / 2 + GBOARD_ORIGIN_X;
     curPos.Y = GBOARD_ORIGIN_Y;
     SetCurrentCursorPos(curPos.X, curPos.Y);
     ShowBlock(blockModel[block_id]);
+
     while(1) {
+        BlockDown();
         ProcessKeyInput();
     }
     getchar();
     return (0);
 }
 
+int DetectCollision(int posX, int posY, char blockModel[4][4]) {
+    int x, y;
+    int arrX = posX / 2;
+    int arrY = posY;
+    for (x = 0; x < 4; x++) {
+        for (y = 0; y < 4; y++) {
+            if (gameBoardInfo[arrY + y - GBOARD_ORIGIN_Y][arrX + x - GBOARD_ORIGIN_X] == 1 && blockModel[y][x] == 1)
+                return (0);
+        }
+    }
+    return (1);
+}
 
 void DrawGameBoard(void) {
     int x, y;
     
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = GBOARD_ORIGIN_Y; y <= GBOARD_HEIGHT + GBOARD_ORIGIN_Y; y++){
         gameBoardInfo[y][0] = 1;
-        gameBoardInfo[y][GBOARD_WIDTH / 2] = 1;
+        gameBoardInfo[y][GBOARD_WIDTH / 2 + 1] = 1;
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y+y);
         if (y == GBOARD_HEIGHT)
             printf("¦¦");
@@ -35,12 +48,12 @@ void DrawGameBoard(void) {
             printf("¦¢");
     }
 
-    for (x = 0; x < GBOARD_WIDTH + 2; x++){
+    for (x = GBOARD_ORIGIN_X; x < GBOARD_WIDTH + 2 + GBOARD_ORIGIN_X; x++){
         printf("¦¡");
         gameBoardInfo[GBOARD_HEIGHT][x] = 1;
     }
 
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = GBOARD_ORIGIN_Y; y <= GBOARD_HEIGHT + GBOARD_ORIGIN_Y; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X+ GBOARD_WIDTH + 2, GBOARD_ORIGIN_Y+GBOARD_HEIGHT -y);
         if (y == 0)
             printf("¦¥");
@@ -73,10 +86,15 @@ COORD GetCurrentCursorPos(void) {
 }
 
 void ProcessKeyInput(void) {
-    int key;
-    BlockDown();
+    COORD curPos = GetCurrentCursorPos();
 
-    for (int i = 0; i < 20; i++) {
+    if (!DetectCollision(curPos.X, curPos.Y + 1, blockModel[block_id])) {
+        return;
+    }
+
+    int key;
+
+    for (int i = 0; i < 25; i++) {
         if (_kbhit() != 0) {
             key = _getch();
             switch (key) {
@@ -98,6 +116,9 @@ void ProcessKeyInput(void) {
 void ShiftRight(void) {
     COORD curPos = GetCurrentCursorPos();
 
+    if (!DetectCollision(curPos.X + 2, curPos.Y, blockModel[block_id])) {
+        return ;
+    }
     DeleteBlock(blockModel[block_id]);
     curPos.X += 2;
     SetCurrentCursorPos(curPos.X, curPos.Y);
@@ -107,6 +128,9 @@ void ShiftRight(void) {
 void ShiftLeft(void) {
     COORD curPos = GetCurrentCursorPos();
 
+    if (!DetectCollision(curPos.X - 2, curPos.Y, blockModel[block_id])) {
+        return ;
+    }
     DeleteBlock(blockModel[block_id]);
     curPos.X -= 2;
     SetCurrentCursorPos(curPos.X, curPos.Y);
@@ -127,11 +151,17 @@ int BlockDown(void) {
 }
 
 void ReverseRotateBlock(void) {
-    int block_senior;
+    COORD curPos = GetCurrentCursorPos();
 
-    DeleteBlock(blockModel[block_id]);
-    block_senior = block_id - block_id % 4;
-    block_id = block_senior + (block_id + 3) % 4;
+    int block_base = (block_id / 4) * 4;
+    int block_rotated = block_base + (block_id + 1) % 4;
+
+    if (!DetectCollision(curPos.X, curPos.Y, blockModel[block_rotated])) {
+        return ;
+    }
+    DeleteBlock(blockModel[block_id++]);
+    block_id = block_rotated;
+    if (block_id == block_base + 4) block_id = block_base;
     ShowBlock(blockModel[block_id]);
 }
 
@@ -143,6 +173,7 @@ void RotateTwiceBlock(void) {
     block_id = block_senior + (block_id + 2) % 4;
     ShowBlock(blockModel[block_id]);
 }
+
 void DeleteBlock(char blockInfo[4][4]) {
     int y, x;
     COORD curPos = GetCurrentCursorPos();
