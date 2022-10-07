@@ -12,6 +12,7 @@
 # define DOWNRIGHT 99
 # define ROTATERCLOCK 106
 # define ROTATETWICE 107
+# define SPACE 32
 # define GBOARD_WIDTH 20
 # define GBOARD_HEIGHT 20
 # define GBOARD_ORIGIN_X 4
@@ -179,6 +180,7 @@ int speed;
 int curPosX;
 int curPosY;
 
+int IsGameOver(void);
 void AddBlockToBoard(void);
 void GameBoardInfo(void);
 int DetectCollision(int posX, int posY, char blockModel[4][4]);

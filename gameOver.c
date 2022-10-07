@@ -12,16 +12,33 @@ int main(void) {
     GameBoardInfo();
 
     ShowBlock(blockModel[block_id]);
-    
-    while(1) {
-        if (!BlockDown()) {
-            AddBlockToBoard();
+    while (1){
+        if (IsGameOver())
             break ;
+        while(1) {
+            if (!BlockDown()) {
+                AddBlockToBoard();
+                curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X) / 2;
+                curPosY = GBOARD_ORIGIN_Y;
+                srand((unsigned int)time(NULL));
+                block_id = (rand() % 7) * 4;
+                SetCurrentCursorPos(curPosX, curPosY);
+                ShowBlock(blockModel[block_id]);
+                break ;
+            }
+            ProcessKeyInput();
         }
-        ProcessKeyInput();
     }
-
+    SetCurrentCursorPos(12, 0);
+    puts("Game Over!!");
     getchar();
+    return (0);
+}
+
+int IsGameOver(void) {
+    if (!DetectCollision(curPosX, curPosY, blockModel[block_id])) {
+        return (1);
+    }
     return (0);
 }
 
@@ -122,15 +139,20 @@ void ProcessKeyInput(void) {
         if (_kbhit() != 0) {
             key = _getch();
             switch (key) {
+            case SPACE :
+                for (int j = 0; j < 30; j++) {
+                    BlockDown();
+                }
+                break ;
             case LEFT :
                 ShiftLeft();
-                break;
+                break ;
             case RIGHT :
                 ShiftRight();
-                break;
+                break ;
             case UP :
                 ReverseRotateBlock();
-                break;
+                break ;
             }
         }
         Sleep(speed);
