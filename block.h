@@ -176,7 +176,8 @@ char blockModel[][4][4] =
 
 int block_id;
 int speed;
-int curPosX = 12, curPosY = 2;
+int curPosX;
+int curPosY;
 
 void AddBlockToBoard(void);
 void GameBoardInfo(void);

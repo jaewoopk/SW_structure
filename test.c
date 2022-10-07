@@ -1,15 +1,26 @@
-#include <stdio.h>
-#pragma waring(disable:4996)
+#include "block.h"
+
+void GameBoardInfo(void) {
+    int y, x;
+
+    for (y = 0; y < GBOARD_HEIGHT; y++){
+        gameBoardInfo[y][0] = 1;
+        gameBoardInfo[y][GBOARD_WIDTH + 1] = 1;
+    }
+
+    for (x = 0; x < GBOARD_WIDTH + 2; x++){
+        gameBoardInfo[GBOARD_HEIGHT][x] = 1;
+    }
+}
 
 int main() {
-    double a,b,c;
-    double g;
-    scanf("%lf %lf %lf", &a,&b,&c);
-    g = (a + b + c) / 3;
-    if (g >= 91.5) printf("A");
-    else if (g >= 85.5) printf("B");
-    else if (g >= 80.5) printf("C");
-    else printf("F");
-
-    if (a == 100)
+    GameBoardInfo();
+    for (int y = 0; y < GBOARD_HEIGHT + 1; y++) {
+        for (int x = 0; x < GBOARD_WIDTH + 2; x++) {
+            printf("%d",gameBoardInfo[y][x]);
+        }
+        printf("\n");
+    }
+    getchar();
+    return 0;
 }

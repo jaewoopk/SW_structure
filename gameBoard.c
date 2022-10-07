@@ -114,13 +114,11 @@ void ShiftLeft(void) {
 }
 
 int BlockDown(void) {
-    COORD curPos = GetCurrentCursorPos();
-
     if (!DetectCollision(curPos.X, curPos.Y + 1, blockModel[block_id])) {
         return (0);
     }
     DeleteBlock(blockModel[block_id]);
-    curPos.Y += 1;
+    curPosY += 1;
     SetCurrentCursorPos(curPos.X, curPos.Y);
     ShowBlock(blockModel[block_id]);
     return (1);
