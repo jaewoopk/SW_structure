@@ -176,7 +176,10 @@ char blockModel[][4][4] =
 
 int block_id;
 int speed;
+int curPosX = 12, curPosY = 2;
 
+void AddBlockToBoard(void);
+void GameBoardInfo(void);
 int DetectCollision(int posX, int posY, char blockModel[4][4]);
 void DrawGameBoard(void);
 void ProcessKeyInput(void);
