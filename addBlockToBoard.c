@@ -71,21 +71,21 @@ void DrawGameBoard(void) {
     for (y = 0; y <= GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
         if (y == GBOARD_HEIGHT)
-            printf("¦¦");
+            printf("ï¿½ï¿½");
         else
-            printf("¦¢");
+            printf("ï¿½ï¿½");
     }
 
     for (x = 0; x < GBOARD_WIDTH; x++){
-        printf("¦¡");
+        printf("ï¿½ï¿½");
     }
 
     for (y = 0; y <= GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH, GBOARD_ORIGIN_Y + GBOARD_HEIGHT -y);
         if (y == 0)
-            printf("¦¥");
+            printf("ï¿½ï¿½");
         else
-            printf("¦¢");
+            printf("ï¿½ï¿½");
     }
 }
 
@@ -211,7 +211,7 @@ void ShowBlock(char blockInfo[4][4]) {
             SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
 
             if (blockInfo[y][x] == 1) {
-                printf("¡á");
+                printf("ï¿½ï¿½");
             }
         }
     }

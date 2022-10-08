@@ -18,6 +18,7 @@ int main(void) {
         while(1) {
             if (!BlockDown()) {
                 AddBlockToBoard();
+                RemoveFillUpLine();
                 curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X) / 2;
                 curPosY = GBOARD_ORIGIN_Y;
                 srand((unsigned int)time(NULL));
@@ -33,6 +34,42 @@ int main(void) {
     puts("Game Over!!");
     getchar();
     return (0);
+}
+
+void RemoveFillUpLine(void) {
+    int line, y, x;
+    
+    for (y = GBOARD_HEIGHT - 1; y > 0; y--) {
+        for (x = 1; x < GBOARD_WIDTH + 1; x++) {
+            if (gameBoardInfo[y][x] != 1)
+                break ;
+        }
+        if (x == (GBOARD_WIDTH + 1)) {
+            for (line = 0; y - line > 0; line++) {
+                memcpy(&gameBoardInfo[y - line][1], &gameBoardInfo[(y - line) - 1][1], GBOARD_WIDTH * sizeof(int));
+            }
+        }
+    }
+    RedrawBlocks();
+}
+
+void RedrawBlocks(void) {
+    int y, x;
+    int cursX, cursY;
+
+    for (y = 0; y < GBOARD_HEIGHT; y++) {
+        for (x = 1; x < GBOARD_WIDTH + 1; x++) {
+            cursX = x * 2 + GBOARD_ORIGIN_X;
+            cursY = y + GBOARD_ORIGIN_Y;
+            SetCurrentCursorPos(cursX, cursY);
+            if (gameBoardInfo[y][x] == 1) {
+                printf("бс");
+            }
+            else {
+                printf(" ");
+            }
+        }
+    }
 }
 
 int IsGameOver(void) {

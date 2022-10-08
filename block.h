@@ -23,6 +23,7 @@
 # include <windows.h>
 # include <time.h>
 # include <conio.h>
+# include <string.h>
 
 int gameBoardInfo[GBOARD_HEIGHT + 1][GBOARD_WIDTH + 2];
 char blockModel[][4][4] =
@@ -180,6 +181,8 @@ int speed;
 int curPosX;
 int curPosY;
 
+void RemoveFillUpLine(void);
+void RedrawBlocks(void);
 int IsGameOver(void);
 void AddBlockToBoard(void);
 void GameBoardInfo(void);
