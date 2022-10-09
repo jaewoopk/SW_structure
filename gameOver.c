@@ -48,6 +48,7 @@ void RemoveFillUpLine(void) {
             for (line = 0; y - line > 0; line++) {
                 memcpy(&gameBoardInfo[y - line][1], &gameBoardInfo[(y - line) - 1][1], GBOARD_WIDTH * sizeof(int));
             }
+            y--;
         }
     }
     RedrawBlocks();

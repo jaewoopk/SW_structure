@@ -5,7 +5,7 @@ void GameBoardInfo(void) {
 
     for (y = 0; y < GBOARD_HEIGHT; y++){
         gameBoardInfo[y][0] = 1;
-        gameBoardInfo[y][GBOARD_WIDTH + 1] = 1;
+        gameBoardInfo[y][GBOARD_WIDTH / 2] = 1;
     }
 
     for (x = 0; x < GBOARD_WIDTH + 2; x++){
