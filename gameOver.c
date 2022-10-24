@@ -1,9 +1,11 @@
 #include "block.h"
 
 int main(void) {
+    speed = 20;
+    stage = 1;
     RemoveCursor();
-    speed = 10;
-    curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X) / 2;
+    PrintScore();
+    curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
     curPosY = GBOARD_ORIGIN_Y;
     srand((unsigned int)time(NULL));
     block_id = (rand() % 7) * 4;
@@ -12,20 +14,21 @@ int main(void) {
     GameBoardInfo();
 
     ShowBlock(blockModel[block_id]);
-    while (1){
+    while (1) {
         if (IsGameOver())
-            break ;
-        while(1) {
+            break;
+        while (1) {
             if (!BlockDown()) {
                 AddBlockToBoard();
                 RemoveFillUpLine();
-                curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X) / 2;
+                PrintScore();
+                curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
                 curPosY = GBOARD_ORIGIN_Y;
                 srand((unsigned int)time(NULL));
                 block_id = (rand() % 7) * 4;
                 SetCurrentCursorPos(curPosX, curPosY);
                 ShowBlock(blockModel[block_id]);
-                break ;
+                break;
             }
             ProcessKeyInput();
         }
@@ -36,22 +39,49 @@ int main(void) {
     return (0);
 }
 
+void PrintScore(void) {
+    SetCurrentCursorPos(30, 10);
+    printf("Score : %d", score);
+
+    SetCurrentCursorPos(30, 12);
+    printf("Stage : %d", stage);
+
+}
+
 void RemoveFillUpLine(void) {
     int line, y, x;
-    
+
     for (y = GBOARD_HEIGHT - 1; y > 0; y--) {
         for (x = 1; x < GBOARD_WIDTH + 1; x++) {
-            if (gameBoardInfo[y][x] != 1)
-                break ;
+            if (gameBoardInfo[y][x] != 1) {
+                break;
+            }
         }
         if (x == (GBOARD_WIDTH + 1)) {
             for (line = 0; y - line > 0; line++) {
-                memcpy(&gameBoardInfo[y - line][1], &gameBoardInfo[(y - line) - 1][1], GBOARD_WIDTH * sizeof(int));
+                memcpy(&gameBoardInfo[y - line][1], &gameBoardInfo[(y - line) - 1][1], (GBOARD_WIDTH + 1) * sizeof(int));
             }
-            y--;
+            y++;
+            score += 10;
+            if (score % 30 == 0) {
+                speed--;
+            }
+            if (score % 100 == 0) {
+                stage++;
+            }
         }
     }
     RedrawBlocks();
+
+    //SetCurrentCursorPos(50, 5);
+
+    //for (int i = 0; i < GBOARD_HEIGHT + 1; i++) {
+    //    for (int j = 0; j < GBOARD_WIDTH + 2; j++) {
+    //        printf(" %d", gameBoardInfo[i][j]);
+    //    }
+    //    /*printf("\n");
+    //    SetCurrentCursorPos(50, 5 + i);*/
+    //}
 }
 
 void RedrawBlocks(void) {
@@ -67,7 +97,7 @@ void RedrawBlocks(void) {
                 printf("¡á");
             }
             else {
-                printf(" ");
+                printf("  ");
             }
         }
     }
@@ -86,7 +116,7 @@ void AddBlockToBoard(void) {
         for (x = 0; x < 4; x++) {
             arrCurX = (curPosX - GBOARD_ORIGIN_X) / 2;
             arrCurY = curPosY - GBOARD_ORIGIN_Y;
-            
+
             if (blockModel[block_id][y][x] == 1)
                 gameBoardInfo[arrCurY + y][arrCurX + x] = 1;
         }
@@ -110,20 +140,20 @@ int DetectCollision(int posX, int posY, char blockModel[4][4]) {
 void GameBoardInfo(void) {
     int y, x;
 
-    for (y = 0; y < GBOARD_HEIGHT; y++){
+    for (y = 0; y < GBOARD_HEIGHT + 1; y++) {
         gameBoardInfo[y][0] = 1;
-        gameBoardInfo[y][GBOARD_WIDTH / 2] = 1;
+        gameBoardInfo[y][GBOARD_WIDTH + 1] = 1;
     }
 
-    for (x = 0; x < GBOARD_WIDTH + 2; x++){
+    for (x = 0; x < GBOARD_WIDTH + 2; x++) {
         gameBoardInfo[GBOARD_HEIGHT][x] = 1;
     }
 }
 
 void DrawGameBoard(void) {
     int y, x;
-    
-    for (y = 0; y < GBOARD_HEIGHT; y++){
+
+    for (y = 0; y < GBOARD_HEIGHT + 1; y++) {
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
         if (y == GBOARD_HEIGHT)
             printf("¦¦");
@@ -131,12 +161,12 @@ void DrawGameBoard(void) {
             printf("¦¢");
     }
 
-    for (x = 0; x < GBOARD_WIDTH; x++){
+    for (x = 0; x < (GBOARD_WIDTH + 1) * 2; x++) {
         printf("¦¡");
     }
 
-    for (y = 0; y < GBOARD_HEIGHT; y++){
-        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH, GBOARD_ORIGIN_Y + GBOARD_HEIGHT -y);
+    for (y = 0; y < GBOARD_HEIGHT + 1; y++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + (GBOARD_WIDTH + 1) * 2, GBOARD_ORIGIN_Y + GBOARD_HEIGHT - y);
         if (y == 0)
             printf("¦¥");
         else
@@ -152,7 +182,7 @@ void RemoveCursor(void) {
 }
 
 void SetCurrentCursorPos(int x, int y) {
-    COORD pos = {x, y};
+    COORD pos = { x, y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
@@ -177,20 +207,20 @@ void ProcessKeyInput(void) {
         if (_kbhit() != 0) {
             key = _getch();
             switch (key) {
-            case SPACE :
-                for (int j = 0; j < 30; j++) {
+            case SPACE:
+                for (int j = 0; j < 50; j++) {
                     BlockDown();
                 }
-                break ;
-            case LEFT :
+                break;
+            case LEFT:
                 ShiftLeft();
-                break ;
-            case RIGHT :
+                break;
+            case RIGHT:
                 ShiftRight();
-                break ;
-            case UP :
+                break;
+            case UP:
                 ReverseRotateBlock();
-                break ;
+                break;
             }
         }
         Sleep(speed);
@@ -209,7 +239,7 @@ void ShiftRight(void) {
 
 void ShiftLeft(void) {
     if (!DetectCollision(curPosX - 2, curPosY, blockModel[block_id])) {
-       return;
+        return;
     }
     DeleteBlock(blockModel[block_id]);
     curPosX -= 2;
@@ -219,7 +249,7 @@ void ShiftLeft(void) {
 
 int BlockDown(void) {
     if (!DetectCollision(curPosX, curPosY + 1, blockModel[block_id])) {
-      return (0);
+        return (0);
     }
     DeleteBlock(blockModel[block_id]);
     curPosY += 1;
@@ -237,7 +267,7 @@ void ReverseRotateBlock(void) {
     }
     DeleteBlock(blockModel[block_id]);
     block_id = block_rotated;
-    
+
     ShowBlock(blockModel[block_id]);
 }
 
@@ -248,32 +278,32 @@ void RotateTwiceBlock(void) {
 
 void DeleteBlock(char blockInfo[4][4]) {
     int y, x;
-    COORD curPos = GetCurrentCursorPos();
+    //COORD curPos = GetCurrentCursorPos();
 
     for (y = 0; y < 4; y++) {
         for (x = 0; x < 4; x++) {
-            SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
+            SetCurrentCursorPos(curPosX + (x * 2), curPosY + y);
 
             if (blockInfo[y][x] == 1) {
                 printf("  ");
             }
         }
     }
-    SetCurrentCursorPos(curPos.X, curPos.Y);
+    SetCurrentCursorPos(curPosX, curPosY);
 }
 
 void ShowBlock(char blockInfo[4][4]) {
     int y, x;
-    COORD curPos = GetCurrentCursorPos();
+    //COORD curPos = GetCurrentCursorPos();
 
     for (y = 0; y < 4; y++) {
         for (x = 0; x < 4; x++) {
-            SetCurrentCursorPos(curPos.X + (x * 2), curPos.Y + y);
+            SetCurrentCursorPos(curPosX + (x * 2), curPosY + y);
 
             if (blockInfo[y][x] == 1) {
                 printf("¡á");
             }
         }
     }
-    SetCurrentCursorPos(curPos.X, curPos.Y);
+    SetCurrentCursorPos(curPosX, curPosY);
 }

@@ -1,19 +1,14 @@
 #ifndef BLOCK_H
 # define BLOCK_H
 
-# define UPLEFT 113
 # define UP 119
-# define UPRIGHT 101
 # define LEFT 97
-# define STILL 115
 # define RIGHT 100
-# define DOWNLEFT 122
-# define DOWN 120
-# define DOWNRIGHT 99 
+# define DOWN 120 
 # define ROTATERCLOCK 106
 # define ROTATETWICE 107
 # define SPACE 32
-# define GBOARD_WIDTH 20
+# define GBOARD_WIDTH 10
 # define GBOARD_HEIGHT 20
 # define GBOARD_ORIGIN_X 4
 # define GBOARD_ORIGIN_Y 2
@@ -180,7 +175,10 @@ int block_id;
 int speed;
 int curPosX;
 int curPosY;
+int score;
+int stage;
 
+void PrintScore(void);
 void RemoveFillUpLine(void);
 void RedrawBlocks(void);
 int IsGameOver(void);
