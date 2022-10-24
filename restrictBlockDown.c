@@ -8,7 +8,6 @@ int main(void) {
     DrawGameBoard();
 
     COORD curPos = GetCurrentCursorPos();
-
     curPos.X = GBOARD_WIDTH / 2 + GBOARD_ORIGIN_X;
     curPos.Y = GBOARD_ORIGIN_Y;
     SetCurrentCursorPos(curPos.X, curPos.Y);
@@ -40,7 +39,7 @@ int DetectCollision(int posX, int posY, char blockModel[4][4]) {
 void DrawGameBoard(void) {
     int x, y;
     
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = 0; y < GBOARD_HEIGHT; y++){
         gameBoardInfo[y][0] = 1;
         gameBoardInfo[y][GBOARD_WIDTH + 1] = 1;
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y+y);
@@ -55,7 +54,7 @@ void DrawGameBoard(void) {
         gameBoardInfo[GBOARD_HEIGHT][x] = 1;
     }
 
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = 0; y < GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X+ GBOARD_WIDTH + 2, GBOARD_ORIGIN_Y+GBOARD_HEIGHT -y);
         if (y == 0)
             printf("же");

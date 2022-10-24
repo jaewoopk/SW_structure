@@ -123,7 +123,7 @@ void GameBoardInfo(void) {
 void DrawGameBoard(void) {
     int y, x;
     
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = 0; y < GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
         if (y == GBOARD_HEIGHT)
             printf("¦¦");
@@ -135,7 +135,7 @@ void DrawGameBoard(void) {
         printf("¦¡");
     }
 
-    for (y = 0; y <= GBOARD_HEIGHT; y++){
+    for (y = 0; y < GBOARD_HEIGHT; y++){
         SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH, GBOARD_ORIGIN_Y + GBOARD_HEIGHT -y);
         if (y == 0)
             printf("¦¥");
