@@ -3,31 +3,51 @@
 int main(void) {
     speed = 20;
     stage = 1;
+    speedcount = FALSE;
     RemoveCursor();
     PrintScore();
     curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
     curPosY = GBOARD_ORIGIN_Y;
-    srand((unsigned int)time(NULL));
-    block_id = (rand() % 7) * 4;
-
+ /* srand((unsigned int)time(NULL));
+    block_id = (rand() % 7) * 4;*/
     DrawGameBoard();
     GameBoardInfo();
 
-    ShowBlock(blockModel[block_id]);
+    //ShowBlock(blockModel[block_id]);
     while (1) {
         if (IsGameOver())
             break;
+        keyChecking();
         while (1) {
             if (!BlockDown()) {
+                if (block_id == 20) {
+                    BlockDestroyUp();
+                    PrintScore();
+                    curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
+                    curPosY = GBOARD_ORIGIN_Y;
+                    //srand((unsigned int)time(NULL));
+                    //block_id = (rand() % 7) * 4;
+                    SetCurrentCursorPos(curPosX, curPosY);
+                    break;
+                }
+                else if (block_id == 24) {
+                    DestroyBlock();
+                    RemoveFillUpLine();
+                    PrintScore();
+                    curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
+                    curPosY = GBOARD_ORIGIN_Y;
+                    SetCurrentCursorPos(curPosX, curPosY);
+                    break;
+                }
                 AddBlockToBoard();
                 RemoveFillUpLine();
                 PrintScore();
                 curPosX = (GBOARD_WIDTH + GBOARD_ORIGIN_X);
                 curPosY = GBOARD_ORIGIN_Y;
-                srand((unsigned int)time(NULL));
-                block_id = (rand() % 7) * 4;
+                //srand((unsigned int)time(NULL));
+                //block_id = (rand() % 7) * 4;
                 SetCurrentCursorPos(curPosX, curPosY);
-                ShowBlock(blockModel[block_id]);
+                //ShowBlock(blockModel[block_id]);
                 break;
             }
             ProcessKeyInput();
@@ -39,6 +59,55 @@ int main(void) {
     return (0);
 }
 
+void DestroyBlock(void) {
+    DeleteBlock(blockModel[block_id]);
+    gameBoardInfo[curPosY - 1][curPosX / 2 - 2] = 0;
+    gameBoardInfo[curPosY - 1][curPosX / 2 - 1] = 0;
+    gameBoardInfo[curPosY - 1][curPosX / 2 ] = 0;
+    gameBoardInfo[curPosY][curPosX / 2 - 2] = 0;
+    gameBoardInfo[curPosY][curPosX / 2 - 1] = 0;
+    gameBoardInfo[curPosY][curPosX / 2] = 0;
+}
+
+void BlockDestroyUp(void) {
+    while (curPosY >= GBOARD_ORIGIN_Y + 2) {
+        DeleteBlock(blockModel[block_id]);
+        curPosY -= 1;
+        SetCurrentCursorPos(curPosX, curPosY);
+        ShowBlock(blockModel[block_id]);
+        Sleep(30);
+    }
+    DeleteBlock(blockModel[block_id]);
+}
+
+void keyChecking(void) {
+    int key;
+
+    key = _getch();
+    switch (key) {
+    case ZERO :
+        block_id = 0;
+        break ;
+    case ONE:
+        block_id = 4;
+        break;
+    case TWO:
+        block_id = 8;
+        break;
+    case THREE:
+        block_id = 12;
+        break;
+    case FOUR:
+        block_id = 16;
+        break;
+    case FIVE:
+        block_id = 20;
+        break;
+    case SIX:
+        block_id = 24;
+        break;
+    }
+}
 void PrintScore(void) {
     SetCurrentCursorPos(30, 10);
     printf("Score : %d", score);
@@ -63,9 +132,9 @@ void RemoveFillUpLine(void) {
             }
             y++;
             score += 10;
-            if (score % 30 == 0) {
+            /*if (score % 10 == 0) {
                 speed--;
-            }
+            }*/
             if (score % 100 == 0) {
                 stage++;
             }
@@ -73,18 +142,18 @@ void RemoveFillUpLine(void) {
     }
     RedrawBlocks();
 
-    //SetCurrentCursorPos(50, 5);
+    SetCurrentCursorPos(50, 5);
 
-    //for (int i = 0; i < GBOARD_HEIGHT + 1; i++) {
-    //    for (int j = 0; j < GBOARD_WIDTH + 2; j++) {
-    //        printf(" %d", gameBoardInfo[i][j]);
-    //    }
-    //    /*printf("\n");
-    //    SetCurrentCursorPos(50, 5 + i);*/
-    //}
+    for (int i = 0; i < GBOARD_HEIGHT + 1; i++) {
+        for (int j = 0; j < GBOARD_WIDTH + 2; j++) {
+            printf(" %d", gameBoardInfo[i][j]);
+        }
+        printf("\n");
+        SetCurrentCursorPos(50, 5 + i);
+    }
 }
 
-void RedrawBlocks(void) {
+void RedrawBlocks(void) { 
     int y, x;
     int cursX, cursY;
 
@@ -107,6 +176,11 @@ int IsGameOver(void) {
     if (!DetectCollision(curPosX, curPosY, blockModel[block_id])) {
         return (1);
     }
+    /*if (speed <= 0) {
+        SetCurrentCursorPos(20, 10);
+        puts("Game Clear!!");
+        return (1);
+    }*/
     return (0);
 }
 
@@ -221,6 +295,41 @@ void ProcessKeyInput(void) {
             case UP:
                 ReverseRotateBlock();
                 break;
+            case FAST_SPEED:
+                if (!speedcount) {
+                    speed = 10;
+                    speedcount = TRUE;
+                }
+                else {
+                    speed = 20;
+                    speedcount = FALSE;
+                }
+                break;
+            case ZERO:
+                DeleteBlock(blockModel[block_id]);
+                block_id = 0;
+                ShowBlock(blockModel[block_id]);
+                break;
+            case ONE:
+                DeleteBlock(blockModel[block_id]);
+                block_id = 4;
+                ShowBlock(blockModel[block_id]);
+                break;
+            case TWO:
+                DeleteBlock(blockModel[block_id]);
+                block_id = 8;
+                ShowBlock(blockModel[block_id]);
+                break;
+            case THREE:
+                DeleteBlock(blockModel[block_id]);
+                block_id = 12;
+                ShowBlock(blockModel[block_id]);
+                break;
+            case FOUR:
+                DeleteBlock(blockModel[block_id]);
+                block_id = 16;
+                ShowBlock(blockModel[block_id]);
+                break;
             }
         }
         Sleep(speed);
@@ -229,6 +338,10 @@ void ProcessKeyInput(void) {
 
 void ShiftRight(void) {
     if (!DetectCollision(curPosX + 2, curPosY, blockModel[block_id])) {
+        DeleteBlock(blockModel[block_id]);
+        curPosX = GBOARD_ORIGIN_X + 2;
+        SetCurrentCursorPos(curPosX, curPosY);
+        ShowBlock(blockModel[block_id]);
         return;
     }
     DeleteBlock(blockModel[block_id]);

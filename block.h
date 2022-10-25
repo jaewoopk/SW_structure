@@ -12,13 +12,23 @@
 # define GBOARD_HEIGHT 20
 # define GBOARD_ORIGIN_X 4
 # define GBOARD_ORIGIN_Y 2
-
+# define ZERO 48
+# define ONE 49
+# define TWO 50
+# define THREE 51
+# define FOUR 52
+# define FIVE 53
+# define SIX 54
+# define FAST_SPEED 115
+# define TRUE 1
+# define FALSE 0
 
 # include <stdio.h>
 # include <windows.h>
 # include <time.h>
 # include <conio.h>
 # include <string.h>
+# pragma warning(disable:4996)
 
 int gameBoardInfo[GBOARD_HEIGHT + 1][GBOARD_WIDTH + 2];
 char blockModel[][4][4] =
@@ -51,18 +61,18 @@ char blockModel[][4][4] =
         {0, 0, 0, 0} },  
     {
         {0, 0, 0, 0},
-        {0, 1, 1, 0},
-        {0, 0, 1, 0},
-        {0, 0, 1, 0} },   
+        {1, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0} },   
     {
         {0, 0, 0, 0},
-        {0, 1, 1, 1},
-        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
         {0, 0, 0, 0} },   
     {
-        {0, 1, 0, 0},
-        {0, 1, 0, 0},
-        {0, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 1, 0, 0},
         {0, 0, 0, 0} },
  
     {
@@ -82,15 +92,15 @@ char blockModel[][4][4] =
         {0, 1, 0, 0} },   
     {
         {0, 0, 0, 0},
-        {0, 1, 0, 0},
-        {0, 1, 1, 0},
-        {0, 1, 0, 0} },
+        {1, 0, 0, 0},
+        {1, 1, 0, 0},
+        {1, 0, 0, 0} },
  
     {
-        {0, 1, 0, 0},
-        {0, 1, 0, 0},
-        {0, 1, 0, 0},
-        {0, 1, 0, 0} },  
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0} },  
     {
         {0, 0, 0, 0},
         {0, 0, 0, 0},
@@ -134,9 +144,9 @@ char blockModel[][4][4] =
         {1, 1, 0, 0},
         {0, 0, 0, 0} },  
     {
+        {1, 0, 0, 0},
+        {1, 1, 0, 0},
         {0, 1, 0, 0},
-        {0, 1, 1, 0},
-        {0, 0, 1, 0},
         {0, 0, 0, 0} },   
     {
         {0, 0, 0, 0},
@@ -144,15 +154,15 @@ char blockModel[][4][4] =
         {1, 1, 0, 0},
         {0, 0, 0, 0} },  
     {
+        {1, 0, 0, 0},
+        {1, 1, 0, 0},
         {0, 1, 0, 0},
-        {0, 1, 1, 0},
-        {0, 0, 1, 0},
         {0, 0, 0, 0} }, 
  
     {
-        {0, 0, 0, 0},
         {1, 1, 0, 0},
         {0, 1, 1, 0},
+        {0, 0, 0, 0},
         {0, 0, 0, 0} },  
     {
         {0, 1, 0, 0},
@@ -160,9 +170,9 @@ char blockModel[][4][4] =
         {1, 0, 0, 0},
         {0, 0, 0, 0} },
     {  
-        {0, 0, 0, 0},
         {1, 1, 0, 0},
         {0, 1, 1, 0},
+        {0, 0, 0, 0},
         {0, 0, 0, 0} },  
     {
         {0, 1, 0, 0},
@@ -177,7 +187,11 @@ int curPosX;
 int curPosY;
 int score;
 int stage;
+int speedcount;
 
+void DestroyBlock(void);
+void BlockDestroyUp(void);
+void keyChecking(void);
 void PrintScore(void);
 void RemoveFillUpLine(void);
 void RedrawBlocks(void);
