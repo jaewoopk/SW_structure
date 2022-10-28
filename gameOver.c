@@ -61,12 +61,18 @@ int main(void) {
 
 void DestroyBlock(void) {
     DeleteBlock(blockModel[block_id]);
-    gameBoardInfo[curPosY - 1][curPosX / 2 - 2] = 0;
-    gameBoardInfo[curPosY - 1][curPosX / 2 - 1] = 0;
-    gameBoardInfo[curPosY - 1][curPosX / 2 ] = 0;
-    gameBoardInfo[curPosY][curPosX / 2 - 2] = 0;
-    gameBoardInfo[curPosY][curPosX / 2 - 1] = 0;
-    gameBoardInfo[curPosY][curPosX / 2] = 0;
+    if (curPosY < GBOARD_ORIGIN_Y + GBOARD_HEIGHT - 2) {
+        gameBoardInfo[curPosY - 1][curPosX / 2 - 2] = 0;
+        gameBoardInfo[curPosY - 1][curPosX / 2 - 1] = 0;
+        gameBoardInfo[curPosY - 1][curPosX / 2] = 0;
+        gameBoardInfo[curPosY][curPosX / 2 - 1] = 0;
+        gameBoardInfo[curPosY][curPosX / 2] = 0;
+    }
+    else {
+        gameBoardInfo[curPosY - 1][curPosX / 2 - 2] = 0;
+        gameBoardInfo[curPosY - 1][curPosX / 2 - 1] = 0;
+        gameBoardInfo[curPosY - 1][curPosX / 2] = 0;
+    }
 }
 
 void BlockDestroyUp(void) {
@@ -141,7 +147,7 @@ void RemoveFillUpLine(void) {
         }
     }
     RedrawBlocks();
-
+    /*
     SetCurrentCursorPos(50, 5);
 
     for (int i = 0; i < GBOARD_HEIGHT + 1; i++) {
@@ -151,6 +157,7 @@ void RemoveFillUpLine(void) {
         printf("\n");
         SetCurrentCursorPos(50, 5 + i);
     }
+    */
 }
 
 void RedrawBlocks(void) { 
